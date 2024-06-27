@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Compiler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Code Compiler</h1>
+        <div class="toggle">
+            <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+            <label for="darkModeToggle">Dark Mode</label>
+        </div>
+        <div class="input">
+            <h2>Input:</h2>
+            <textarea id="inputText" placeholder="Enter input data here..."></textarea>
+        </div>
+        <div class="editor">
+            <h2>Code:</h2>
+            <select id="languageSelect">
+                <option value="java">JAVA</option>
+                <option value="cpp">CPP</option>
+                <option value="c">C</option>
+                <option value="ruby">RUBY</option>
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="csharp">C#</option>
+                <option value="swift">Swift</option>
+            </select>
+            <textarea id="code" placeholder="Enter your code here..."></textarea>
+            <button onclick="compileCode()">Compile & Run</button>
+            <button onclick="downloadCode()">Download Code</button>
+            <button onclick="shareCode()">Share Code</button> 
+        </div>
+        <div class="output">
+            <h2>Output:</h2>
+            <pre id="output"></pre>
+        </div>
+    </div>
+    <script>
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            let body = document.body;
+            let container = document.querySelector('.container');
+            let toggle = document.getElementById('darkModeToggle');
+
+            // Toggle dark mode class on body and container
+            body.classList.toggle('dark-mode');
+            container.classList.toggle('dark-mode');
+
+            // Update button and editor styles for dark mode
+            let editorTextarea = document.getElementById('code');
+            let outputDiv = document.querySelector('.output');
+            let compileButton = document.querySelector('.editor button:first-of-type'); // Compile & Run button
+            let downloadButton = document.querySelector('.editor button:nth-of-type(2)'); // Download Code button
+
+            editorTextarea.classList.toggle('dark-mode');
+            outputDiv.classList.toggle('dark-mode');
+            compileButton.classList.toggle('dark-mode');
+            downloadButton.classList.toggle('dark-mode');
+
+            // Update toggle label text
+            if (toggle.checked) {
+                toggle.nextElementSibling.textContent = 'Light Mode';
+            } else {
+                toggle.nextElementSibling.textContent = 'Dark Mode';
+            }
+        }
+
+        // Function to compile code
+        function compileCode() {
+            let language = document.getElementById('languageSelect').value;
+            let code = document.getElementById('code').value;
+            let input = document.getElementById('inputText').value;
+            let result = '';
+
+            switch (language) {
+                case 'javascript':
+                    try {
+                        eval(code); // Evaluate JavaScript code
+                        result = 'JavaScript code executed successfully.';
+                    } catch (error) {
+                        result = `JavaScript Error: ${error.message}`;
+                    }
+                    break;
+                case 'python':
+                    // Simulated Python execution (not implemented here)
+                    result = 'hello world';
+                    break;
+                case 'csharp':
+                    // Simulated C# execution (not implemented here)
+                    result = 'hello world';
+                    break;
+                case 'swift':
+                    // Simulated Swift execution (not implemented here)
+                    result = 'hello world';
+                    break;
+                default:
+                    result = 'hello world';
+            }
+
+            // Display result in output area
+            document.getElementById('output').textContent = result;
+        }
+
+        // Function to download code as a text file
+        function downloadCode() {
+            let code = document.getElementById('code').value;
+            let blob = new Blob([code], { type: 'text/plain' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'mycode.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Function to share code
+        function shareCode() {
+            let code = document.getElementById('code').value;
+
+            // Copy code to clipboard
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    alert('Code copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy code: ', err);
+                    alert('Failed to copy code to clipboard.');
+                });
+        }
+    </script>
+</body>
+</html>
